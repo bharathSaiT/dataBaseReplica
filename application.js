@@ -1,16 +1,15 @@
 //load the database
-
 const DB = require('./database.js')
 
-
+DB.loadDB();
 //get all contents of the database
 console.log(DB.getAll())
 
 //set a key value pair
-DB.set("movie", "Kalki 2989 AD");
-DB.set("actor", "praboss");
-DB.set("karna", "suryaputra");
-DB.set("arjuna","gandivam")
+DB.set("movie", "KGF");
+DB.set("actor", "yash");
+DB.set("karna2", "suryaputra");
+DB.set("arjuna2","gandivam")
 
 
 //get the value of a key
