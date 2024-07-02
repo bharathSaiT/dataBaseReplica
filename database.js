@@ -3,14 +3,18 @@ const fs = require('fs');
 let DataBase_inMem={}
 let DataBase_persistent={};
 
-function set(key , value){
+function set(key , value , ttl=0){
     if(check(key)){
         console.log("key already exists");
         return;
     }
+    if(ttl>0){
+        setTimeout(()=>{
+            del(key);
+        },ttl*1000)
+    }
     DataBase_inMem[key]=value
 }
-
 
 function get (key){
     if(!check(key)){
