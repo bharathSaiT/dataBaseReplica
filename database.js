@@ -43,7 +43,7 @@ function check(key){
 }
 
 function getAll(){
-    return DataBase_inMem
+    return DataBase_inMem;
 }
 
 function clearDB(){
@@ -56,23 +56,26 @@ function clearDB(){
 }
 
 function loadDB(){
-    //load the database from a file
-    fs.readFile('database.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error("error reading database file", err);
-            DataBase_persistent={};
-            return;
-        }
+    return new Promise((resolve,reject)=>{
+            //load the database from a file
+            fs.readFile('database.json', 'utf8', (err, data) => {
+                if (err) {
+                    console.error("error reading database file", err);
+                    DataBase_persistent={};
+                    reject(err);
+                }
 
-        if( data.length === 0 || data.trim() === ''){
-            DataBase_persistent={};
-        }
-        else{
-            DataBase_persistent=JSON.parse(data);
-        }
-        
-        DataBase_inMem ={...DataBase_inMem,...DataBase_persistent};
-        console.log("Database loaded successfully");
+                if( data.length === 0 || data.trim() === ''){
+                    DataBase_persistent={};
+                }
+                else{
+                    DataBase_persistent=JSON.parse(data);
+                }
+                
+                DataBase_inMem ={...DataBase_inMem,...DataBase_persistent};
+                console.log("Database loaded successfully");
+                resolve(DataBase_inMem);
+            });
     });
 }
 
