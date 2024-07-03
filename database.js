@@ -3,21 +3,33 @@ const fs = require('fs');
 let DataBase_inMem={}
 let DataBase_persistent={};
 
-function set(key , value){
+//if database is alive , key expires after ttl seconds
+function set(key , value , ttl=0){
     if(check(key)){
+
         console.log("key already exists");
         return;
     }
-    DataBase_inMem[key]=value
+    DataBase_inMem[key]={value, expiresAt: ttl>0 ? Date.now()+ttl*1000 : null};
+    if(ttl>0){
+        setTimeout(()=>{
+            del(key);
+        },ttl*1000)
+    }
 }
 
-
+//passive deletion of keys
 function get (key){
     if(!check(key)){
         console.log("key does not exist");
         return;
     }
-    return DataBase_inMem[key]
+    if(DataBase_inMem[key].expiresAt && DataBase_inMem[key].expiresAt<Date.now()){
+        del(key);
+        console.log("key expired");
+        return;
+    }
+    return DataBase_inMem[key].value;
 }
 
 function del(key){
@@ -25,7 +37,9 @@ function del(key){
         console.log("key does not exist");
         return;
     }
-    delete DataBase_inMem[key]
+    
+    console.log("key create at ", DataBase_inMem[key].expiresAt-Date.now() , "seconds is deleted");
+    delete DataBase_inMem[key];
     //this will not delete the key, it will just set the value to undefined leading to memory wastage 
     // DataBase_inMem[key]=undefined 
 }
@@ -35,7 +49,13 @@ function update(key , value){
         console.log("key does not exist");
         return;
     }
-    DataBase_inMem[key]=value;
+    if(DataBase_inMem[key].expiresAt && DataBase_inMem[key].expiresAt<Date.now()){
+        del(key);
+        console.log("key expired");
+        return;
+    }
+    DataBase_inMem[key].value=value;
+
 }
 
 function check(key){
@@ -43,7 +63,50 @@ function check(key){
 }
 
 function getAll(){
-    return DataBase_inMem;
+    //return all the keys in the database which are not expired
+    let keys=Object.keys(DataBase_inMem);
+    let res=[];
+    keys.forEach(key=>{
+        if(DataBase_inMem[key].expiresAt && DataBase_inMem[key].expiresAt<Date.now()){
+            del(key);
+            console.log("key expired");
+            return;
+        }
+        res.push({key:key,value:DataBase_inMem[key].value})
+    })
+    // return res;
+
+    const allData= Object.keys(DataBase_inMem).map(key=>{
+        if(DataBase_inMem[key].expiresAt && DataBase_inMem[key].expiresAt<Date.now()){
+            del(key);
+            console.log("key expired");
+            return;
+        }
+        return {key:key,value:DataBase_inMem[key].value}
+    })
+    // return DataBase_inMem;
+
+    const getAllData = {};
+
+    for(let key in DataBase_inMem){
+        if(!DataBase_inMem[key].expiresAt || DataBase_inMem[key].expiresAt > Date.now()){
+            getAllData[key] = DataBase_inMem[key].value;
+        }
+    }
+    return getAllData;
+}
+
+function ttl(key){
+    if(!check(key)){
+        console.log("key does not exist");
+        return;
+    }
+    if(DataBase_inMem[key].expiresAt && DataBase_inMem[key].expiresAt<Date.now()){
+        del(key);
+        console.log("key expired");
+        return;
+    }
+    return (DataBase_inMem[key].expiresAt-Date.now())/1000;
 }
 
 function clearDB(){
@@ -90,7 +153,6 @@ function saveDB(){
     });
 }
 
-
 function saveDBPeriodically(){
     //save the database to a file periodically
     setInterval(saveDB, 1000);
@@ -106,5 +168,6 @@ module.exports={
     update,
     getAll,
     clearDB,
-    loadDB
+    loadDB,
+    ttl
 }

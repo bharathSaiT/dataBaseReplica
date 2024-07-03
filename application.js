@@ -20,10 +20,10 @@ async function main(){
     console.log(DB.getAll())
 
     //set a key value pair
-    DB.set("movie2", "KGF");
-    DB.set("actor2", "yash");
-    DB.set("karna2", "suryaputra");
-    DB.set("arjuna2","gandivam")
+    DB.set("movie", "KGF",3);
+    DB.set("actor", "yash");
+    DB.set("karna", "suryaputra");
+    DB.set("arjuna","gandivam")
 
 
     //get the value of a key
@@ -36,10 +36,11 @@ async function main(){
     console.log(DB.get("movie"))
 
     //set an existing key
-    DB.set("movie", "Kalki 2991 AD");
+    DB.set("movie", "Kalki 2991 AD",);
+    
 
     //delete a key
-    DB.del("movie");
+    // DB.del("movie");
 
     //get all contents of the database
     console.log(DB.getAll())
