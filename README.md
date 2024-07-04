@@ -13,9 +13,15 @@
 * **Data Manipulation:** CRUD (Create, Read, Update, Delete) operations to manage data within the replica.
 * **Transactions:** Implement rudimentary transaction handling to ensure data consistency across changes. 
     * **Note:** Due to the limitations of JavaScript in enforcing ACID properties in a fully distributed setting, this project might focus on emulating transactions for educational purposes. 
+* **ACID Properites Compliant:** 
+    * **ATMOICITY** ATOMICITY is ensusred by implmenting the ability of doing transactions, which either takes place wholly or not at all
+    * **ISOLATION** ISOLATION is ensured by utilising a global locking mechanism 
+    * **CONSISTENCY** CONSISTENCY is maintained by ensuring that any transaction will bring the database from one valid state to another
+    * **DURABILITY** DURABILITY is enhanced by writing data to both memory and persistent storage.
 * **Security:** Explore basic security considerations like user authentication and access control mechanisms (potential areas for exploration: password hashing, role-based access control).
 * **Ordering and Indexing:** Implement basic in-memory indexing techniques to improve query performance.
 * **Error Handling:** Handle potential errors gracefully to enhance robustness.
+
 
 **Learning Objectives:**
 
