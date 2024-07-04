@@ -2,7 +2,8 @@
 const fs = require('fs');
 let DataBase_inMem={}
 let DataBase_persistent={};
-
+let transactionActive=false;
+let transactionContext={};
 //if database is alive , key expires after ttl seconds
 function set(key , value , ttl=0){
     if(check(key)){
@@ -161,6 +162,27 @@ function saveDBPeriodically(){
 saveDBPeriodically();
 // loadDB();
 
+//implement the transactions in the database
+function startTransaction(){
+    if(transactionActive){
+        console.log("Transaction already active");
+        return;
+    }
+    transactionActive=true;
+    transactionContext={...DataBase_inMem};
+}
+
+function commitTransaction(){
+    transactionActive=false;
+    saveDB();
+    transactionContext={};
+}
+
+function rollbackTransaction(){
+    transactionActive=false;
+    DataBase_inMem={...transactionContext};
+}
+
 module.exports={
     set,
     get,
@@ -169,5 +191,8 @@ module.exports={
     getAll,
     clearDB,
     loadDB,
-    ttl
+    ttl,
+    startTransaction,
+    commitTransaction,
+    rollbackTransaction
 }
