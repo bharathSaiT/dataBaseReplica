@@ -1,5 +1,11 @@
 //an replica of in-mem key value store
 const fs = require('fs');
+const zlib = require('zlib');
+
+
+const compressData = (data) => zlib.gzipSync(JSON.stringify(data));
+const decompressData = (data) => JSON.parse(zlib.gunzipSync(data));
+
 let DataBase_inMem={}
 let DataBase_persistent={};
 let transactionActive=false;
@@ -168,7 +174,7 @@ function loadDB(){
                     DataBase_persistent={};
                 }
                 else{
-                    DataBase_persistent=JSON.parse(data);
+                    DataBase_persistent=decompressData(data);
                 }
                 
                 DataBase_inMem ={...DataBase_inMem,...DataBase_persistent};
@@ -180,7 +186,7 @@ function loadDB(){
 
 function saveDB(){
     //save the database to a file
-    fs.writeFile('database.json', JSON.stringify(DataBase_inMem), (err) => {
+    fs.writeFile('database.json', compressData(DataBase_inMem), (err) => {
         if (err) {
             console.error(err)
             return;
