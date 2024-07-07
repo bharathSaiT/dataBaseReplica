@@ -163,21 +163,29 @@ function clearDB(){
 function loadDB(){
     return new Promise((resolve,reject)=>{
             //load the database from a file
-            fs.readFile('database.json', 'utf8', (err, data) => {
+            fs.readFile('database.json', (err, data) => {
                 if (err) {
                     console.error("error reading database file", err);
                     DataBase_persistent={};
                     reject(err);
                 }
 
-                if( data.length === 0 || data.trim() === ''){
+                if( data.length === 0 ){
                     DataBase_persistent={};
                 }
                 else{
+                    // try {
+                    //     DataBase_persistent = decompressData(data);
+                    // } catch (e) {
+                    //     console.error("Error decompressing database file", e);
+                    //     DataBase_persistent = {};
+                    //     return reject(e);
+                    // }
                     DataBase_persistent=decompressData(data);
                 }
                 
                 DataBase_inMem ={...DataBase_inMem,...DataBase_persistent};
+                console.log("Database_inmem", DataBase_inMem);
                 console.log("Database loaded successfully");
                 resolve(DataBase_inMem);
             });
@@ -185,8 +193,9 @@ function loadDB(){
 }
 
 function saveDB(){
+    const data=compressData(DataBase_inMem);
     //save the database to a file
-    fs.writeFile('database.json', compressData(DataBase_inMem), (err) => {
+    fs.writeFile('database.json', data , (err) => {
         if (err) {
             console.error(err)
             return;
@@ -211,7 +220,12 @@ function saveDBPeriodically(){
 }
 
 saveDBPeriodically();
-// loadDB();
+loadDB().then(()=>{
+    set("key1","value1",10);
+    set("key2","value2",20);
+    set("key3","value3",30);
+   console.log(getAll());
+})
 
 
 
