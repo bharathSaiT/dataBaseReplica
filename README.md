@@ -44,7 +44,7 @@ This project is ideal for:
 
 **Development Stack:**
 
-* JavaScript (primary focus)
+* JavaScript ( will be implemented in more performant language like C++ /GoLang in some time)
 * Potential additional libraries as needed (will be mentioning any specific libraries we use)
 
 **Project Status:**
