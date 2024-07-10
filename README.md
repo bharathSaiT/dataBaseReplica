@@ -33,25 +33,24 @@ This project serves as a practical learning tool to:
 * Explore security considerations for database interactions.
 * Investigate the role of indexing in query performance.
 
-**Target Audience:**
-
-This project is ideal for:
-
-* Beginner to intermediate developers interested in:
-    * Understanding database fundamentals.
-    * Experimenting with JavaScript in a database context (with appropriate caveats about limitations).
-    * Exploring the challenges of implementing complex database features in a non-traditional environment.
+* Understanding database fundamentals.
+* Experimenting with JavaScript in a database context (with appropriate caveats about limitations).
+*  Exploring the challenges of implementing complex database features in a non-traditional environment.
 
 **Development Stack:**
 
 * JavaScript ( will be implemented in more performant language like C++ /GoLang in some time)
-* Potential additional libraries as needed (will be mentioning any specific libraries we use)
 
 **Project Status:**
-
-* **Work in Progress (WIP):** This project is under development.
-
-**Contributions:**
-
-* Contributions are welcome! Feel free to open issues or pull requests to collaborate on this learning journey. (Encourages community involvement)
+1. fundamental data retrieval → get , set , delete, getAll , clearDB ,update
+2. add key expiry
+3. persisting data , in Mem 
+4. persisting data in file storage
+5. exposing promises , for the clients to have persistent DB
+6. better ttl implementation, instead of having just a callback - have an expiry time which is considered
+7. passive key deletion -TTL
+8. instead of persisting DB , at regular interval - persist the DB only when changes happen
+9. Database transactions - adding start , commit , rollback ; atomicity
+10. Isolation - by ensuring global DB lock
+11. data compression & de-compression , for efficient space storage
 
