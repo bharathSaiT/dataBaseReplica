@@ -1,5 +1,6 @@
 # dataBaseReplicaJS
- A JavaScript Database Replicating Internal implementations of DataBase
+ A JavaScript Database Replicating Internal implementations of DataBase.
+ -  TODO:( will be implemented in more performant language like **C / GoLang** in some time)
 
  **Project Title:**
 
